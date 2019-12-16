@@ -25,7 +25,6 @@ public class POItems {
 	
 	@OneToOne
 	@JoinColumn(name="productId")
-	@JsonIgnore
 	private Products productObj;
 	
 	private int poQuantity;

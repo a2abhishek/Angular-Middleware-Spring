@@ -33,16 +33,15 @@ public class PurchaseOrder {
 	
 	@ManyToOne
 	@JoinColumn(name="buyer_Id")
-	@JsonIgnore
+	
 	private User buyerObj;
 	
 	@ManyToOne
 	@JoinColumn(name="Seller_Id")
-	@JsonIgnore
+	
 	private User sellerObj;
 	
 	@OneToMany(mappedBy="purchaseOrderObj",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	@JsonIgnore
 	private List<POItems> poItemsObj;
 
 	public int getPurchaseOrderId() {

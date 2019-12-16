@@ -40,32 +40,57 @@ public class VendorController {
 	ProductDao productDaoObj;
 	
 	
-	@PostMapping(value="/updateProductQuantity")
-	public ResponseEntity<?> addInVendorproductTable(@RequestParam(name="pId") int pId  , @RequestParam(name="quantity") int quantity)
+//	@PostMapping(value="/updateProductQuantity")
+//	public ResponseEntity<?> addInVendorproductTable(@RequestParam(name="pId") int pId  , @RequestParam(name="quantity") int quantity)
+//	{
+//		User userObj=(User)session.getAttribute("uObj");							 	//Get userId from session
+//		VendorProduct r=vendorDaoObj.checkProductForVendor(userObj.getUserId(), pId);   //check if product is already added, if present then update the quantity else add the quantity
+//		if(r!=null) {
+//			r.setQuantity(r.getQuantity()+quantity);      								//Quantity added to existing product's quantity
+//		}
+//		else {
+//			r = new VendorProduct();													//else create new row for vendor product and set values 
+//			r.setVendorId(userObj.getUserId());
+//			r.setProductId(pId);
+//			r.setQuantity(quantity);
+//		}
+//		
+//		vendorDaoObj.add(r);                    										//call add method from VendorProductDao
+//
+//		return new ResponseEntity<String>("Person added successfully",HttpStatus.OK);
+//	}
+//	
+	@RequestMapping(value="/updateProductQuantity",method=RequestMethod.GET)
+	public ResponseEntity<?> addInVendorproductTable(@RequestParam(name="productId") int productId, 
+			@RequestParam(name="quantity") int quantity,@RequestParam(name="vendorId")int vendorId)
 	{
-		User userObj=(User)session.getAttribute("uObj");							 	//Get userId from session
-		VendorProduct r=vendorDaoObj.checkProductForVendor(userObj.getUserId(), pId);   //check if product is already added, if present then update the quantity else add the quantity
+		
+		VendorProduct r=vendorDaoObj.checkProductForVendor(vendorId, productId); 
 		if(r!=null) {
-			r.setQuantity(r.getQuantity()+quantity);      								//Quantity added to existing product's quantity
+			r.setQuantity(r.getQuantity()+quantity);      
 		}
 		else {
-			r = new VendorProduct();													//else create new row for vendor product and set values 
-			r.setVendorId(userObj.getUserId());
-			r.setProductId(pId);
+			r = new VendorProduct();			
+			r.setVendorId(vendorId);
+			r.setProductId(productId);
 			r.setQuantity(quantity);
 		}
 		
-		vendorDaoObj.add(r);                    										//call add method from VendorProductDao
-
-		return new ResponseEntity<String>("Person added successfully",HttpStatus.OK);
+		boolean re=vendorDaoObj.add(r);                
+		
+		 if(re) {
+			 	return new ResponseEntity<Object>(r,HttpStatus.OK);
+		 }
+		 else
+		 
+			 return new ResponseEntity<String>("Problem in adding quantity",HttpStatus.INTERNAL_SERVER_ERROR);
+		
 	}
 	
+	
 	@GetMapping(value = "/viewAllAvailableProducts")
-	public ResponseEntity<?> viewAllAvailableProducts() {
+	public ResponseEntity<?> viewAllAvailableProducts(@RequestParam(name="vendorId")int vendorId) {
 		
-		User userObj=(User)session.getAttribute("uObj");  
-		System.out.println(session.getAttribute("uObj"));
-		int vendorId=userObj.getUserId();                      						    //fetch user's id through session 
 		
 		List<?> vendorProducts = vendorDaoObj.getAllProducts(vendorId);      //view products added by vendor getallProducts method in VendorProductDao
 				

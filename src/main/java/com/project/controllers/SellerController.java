@@ -10,6 +10,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +22,7 @@ import com.project.models.POItems;
 import com.project.models.PurchaseOrder;
 
 @Controller
+@CrossOrigin(value="http://localhost:4200")
 public class SellerController {
 	
 	@Autowired
@@ -46,9 +48,7 @@ public class SellerController {
 	public ResponseEntity<?> viewLineItems(@RequestParam(name="viewId") int viewId) {
 		System.out.println(viewId);
 		List<POItems> poitemslist = poitems.getLineItemsById(viewId);
-		//map.addAttribute("poitemslist", poitemslist);
 		System.out.println(poitemslist);
-		session.setAttribute("poitemslist", poitemslist);
 		return new ResponseEntity<List<POItems>>(poitemslist, HttpStatus.OK);
 	}	
 	

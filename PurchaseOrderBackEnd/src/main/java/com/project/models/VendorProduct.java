@@ -25,7 +25,6 @@ public class VendorProduct {
 	
 	@OneToOne
 	@JoinColumn(name="productId",insertable=false,updatable=false)
-	@JsonIgnore
 	Products productObj;
 	
 	
